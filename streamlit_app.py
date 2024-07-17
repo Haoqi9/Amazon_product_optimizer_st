@@ -163,7 +163,7 @@ if filter_submitted:
             currency = row['currency']
             break
 
-    st.write(f'<h3 style="text-align: center;">Search Results (price is {currency})</h3>', unsafe_allow_html=True
+    st.write(f'<h3 style="text-align: center;">Search Results (price is {currency})</h3>', unsafe_allow_html=True)
              
     cols_per_row = 4
     # Get a list of str containers with different names for each product in df.
