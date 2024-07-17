@@ -185,9 +185,10 @@ def save_df_in_pickle(data_list, search_term):
 
     df['discount_perc'] = np.round((df['original_price'] - df['discounted_price']) / df['original_price'] * 100, 2)
     df['popularity_score'] = df['stars'] + np.log10(1 + df['n_reviews'])
+    df['inverse_discounted_price'] = 1/df['discounted_price'])
     mm_scaler = MinMaxScaler(feature_range=(0, 100))
     # 100 - norm_value because we value lower price products: inverse of price.
-    df['disc_price_inv_norm'] = 100 - mm_scaler.fit_transform(df[['discounted_price']])
+    df['disc_price_inv_norm'] = mm_scaler.fit_transform(df[['inverse_discounted_price']])
     df['popularity_score_norm'] = mm_scaler.fit_transform(df[['popularity_score']])
     df['disc_amount'] = df['original_price'] - df['discounted_price']
     df['disc_amount_norm'] = mm_scaler.fit_transform(df[['disc_amount']])
@@ -196,7 +197,7 @@ def save_df_in_pickle(data_list, search_term):
         'product name', 
         'popularity_score', 'stars', 'n_reviews',
         'currency', 'discounted_price', 'original_price', 'discount_perc', 'url', 'image',
-        'popularity_score_norm', 'disc_price_inv_norm', 'disc_amount_norm'
+        'inverse_discounted_price', 'popularity_score_norm', 'disc_price_inv_norm', 'disc_amount_norm'
     ]]
 
     filename = '_'.join(search_term.split(' '))
