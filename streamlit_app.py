@@ -104,17 +104,19 @@ if search_submitted:
 
 with st.form('filter_form'):
     st.write('🧑‍🔧 Choose weights for customized score:')
-    st.caption('Note that products are sorted based on **customized score**.')
-    st.caption('`customized score` = pop_weight x norm_popularity_score + price_weight x norm_inverse_discounted_price + disc_weight x norm_discounted_amount')
-    st.caption('Note all 3 weights **must sum up to 1**!')
+    st.caption("""
+    - Note that products are sorted based on **customized score (0-100)**.
+    - Note all 3 weights **must sum up to 1**!
+    """)
+    st.write('')
     sort_order = st.radio(
-      label='Sort products by:',
+      label='`Sort products by`:',
       options=['Highest customized score.', 'Lowest customized score'],
       index=0
     )
     col_wid1, col_wid2, col_wid3 = st.columns(3, gap='large')
     pop_weight = col_wid1.number_input(
-        label="Popularity weight:",
+        label="`Popularity weight`:",
         min_value=0.0,
         max_value=1.0,
         value=0.7,
@@ -122,7 +124,7 @@ with st.form('filter_form'):
         help="Weight applied to normalized popularity score (0-100). The larger the weight, the more it **emphasizes popular products in terms of review and number of reviews**."
     )
     price_weight = col_wid2.number_input(
-        label="Inverse price weight:",
+        label="`Inverse price weight`:",
         min_value=0.0,
         max_value=1.0,
         value=0.2,
@@ -130,7 +132,7 @@ with st.form('filter_form'):
         help='Weight applied to normalized inverse price (0-100). The larger the weight, the more it **emphasizes inexpensive products**.'
     )
     disc_weight = col_wid3.number_input(
-        label="Discount weight:",
+        label="`Discount weight`:",
         min_value=0.0,
         max_value=1.0,
         value=0.1,
