@@ -49,8 +49,18 @@ async def get_product_data(item_tag, domain_url):
         ' zł',  # Poland
         ' kr'   # Sweden
     ]
-    if currency_unit in currency_price_comma:  # EU unit
-        orig_price, disc_price =  orig_price.replace(',', '.'), disc_price.replace(',', '.')
+    
+    def modify_price_punctuations(price: str):
+        # cases where price is 1.299,00 to 1299.00
+        if len(price) > 6:
+            return price.replace('.', '').replace(',', '.')
+        # cases where price is 165,00 to 150.00
+        else:
+            return price.replace(',', '.')
+    
+    if currency_unit in currency_price_comma:
+        orig_price = modify_price_punctuations(orig_price)
+        disc_price = modify_price_punctuations(disc_price)
     else:
         orig_price, disc_price =  orig_price.replace(',', ''), disc_price.replace(',', '')
 
