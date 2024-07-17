@@ -9,6 +9,8 @@ from Functions.utils import (run_playwright,
                              save_df_in_pickle,
                              get_product_html)
 
+os.system("playwright install")
+
 ##################################################################################
 
 # PAGE CONFIGURATION
@@ -73,21 +75,7 @@ if search_submitted:
     # ensuring efficient handling of asynchronous I/O operations ().
     # Use SelectorEventLoop for non-Windows environments (like Linux or macOS).
     # Streamlit does not support asyncio.run(main()) for windows.
-    
-    # Select the appropriate event loop based on the operating system.
-    if sys.platform == "win32":
-        # Windows-specific event loop
-        loop = asyncio.ProactorEventLoop()
-    else:
-        # It invokes the shell command playwright install as if you had typed it directly into the terminal.
-        # This command instructs Playwright to download and install the necessary browser binaries
-        # (Chromium, Firefox, WebKit) that Playwright depends on.
-        # Indispensable when the script is running in cloud-container, which are usually operated using linux.
-        os.system("playwright install")
-        
-        # Default event loop for other operating systems
-        loop = asyncio.SelectorEventLoop()
-        
+    loop = asyncio.SelectorEventLoop()
     asyncio.set_event_loop(loop)
     
     # Run event loop.
