@@ -105,6 +105,7 @@ if search_submitted:
 with st.form('filter_form'):
     st.write('🧑‍🔧 Choose weights for customized score:')
     st.caption("""
+    - At the moment, only supports Amazon products tailored to **Spain (es)**.
     - Note that products are sorted based on **customized score (0-100)**.
     - Note all 3 weights **must sum up to 1**!
     """)
