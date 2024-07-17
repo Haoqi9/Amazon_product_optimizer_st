@@ -45,7 +45,7 @@ def get_filtered_df(
 
 # INPUT WIDGETS
 
-st.write('<h1 style="text-align: center;">Amazon Product Optimizer</h1>', unsafe_allow_html=True)
+st.write('<h1 style="text-align: center;">Amazon Product Search Optimizer</h1>', unsafe_allow_html=True)
 
 search_submitted = True
 with st.form('search_form'):
@@ -104,7 +104,14 @@ if search_submitted:
 
 with st.form('filter_form'):
     st.write('🧑‍🔧 Choose weights for customized score:')
-    st.caption('Note they **must sum up to 1**!')
+    st.caption('Note that products are sorted based on **customized score**.')
+    st.caption('`customized score` = pop_weight x norm_popularity_score + price_weight x norm_inverse_discounted_price + disc_weight x norm_discounted_amount')
+    st.caption('Note all 3 weights **must sum up to 1**!')
+    sort_order = st.radio(
+      label='Sort products by:',
+      options=['Highest customized score.', 'Lowest customized score'],
+      index=0
+    )
     col_wid1, col_wid2, col_wid3 = st.columns(3, gap='large')
     pop_weight = col_wid1.number_input(
         label="Popularity weight:",
@@ -142,18 +149,22 @@ with st.form('filter_form'):
 if filter_submitted:
     pkl_files = [file for file in os.listdir('./') if file.endswith('.pkl')]
     df = load_df(pkl_files[0].split('.')[0])
+
+    ascending = False if sort_order == 'Highest customized score.' else True
     df = get_filtered_df(
         df=df,
         pop_weight=pop_weight,
         price_weight=price_weight,
-        disc_weight=disc_weight
+        disc_weight=disc_weight,
+        ascending=ascending
     )
-    
     for _, row in df.iterrows():
         if row['currency'] is not 'Unknown':
             currency = row['currency']
             break
 
+    st.write(f'<h3 style="text-align: center;">Search Results (price is {currency})</h3>', unsafe_allow_html=True
+             
     cols_per_row = 4
     # Get a list of str containers with different names for each product in df.
     containers_list = [f'container{i}' for i in range(len(df)+1)]
